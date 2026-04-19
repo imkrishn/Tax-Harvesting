@@ -1,0 +1,22 @@
+import type { Metadata } from "next";
+import "./globals.css";
+import { Providers } from "@/components/Providers";
+
+export const metadata: Metadata = {
+  title: "KoinX",
+  description: "Tax Loss Harvesting",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body className="min-h-full flex flex-col">
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  );
+}
