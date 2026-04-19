@@ -1,13 +1,16 @@
+import Heading from "@/components/Heading";
 import Logo from "@/components/Logo";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
-import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="w-screen p-4 lg:px-44">
-      <div className="flex items-center justify-between">
+    <main className="w-screen ">
+      <div className="flex items-center w-screen justify-between p-3 border-b border-border lg:px-32 bg-secondary-background">
         <Logo />
         <ThemeSwitcher />
+      </div>
+      <div className="flex items-center justify-between lg:px-32 p-3 ">
+        <Heading />
       </div>
     </main>
   );
