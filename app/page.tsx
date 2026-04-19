@@ -1,3 +1,4 @@
+import Disclaimer from "@/components/Disclaimer";
 import Heading from "@/components/Heading";
 import Logo from "@/components/Logo";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
@@ -9,8 +10,9 @@ export default function Home() {
         <Logo />
         <ThemeSwitcher />
       </div>
-      <div className="flex items-center justify-between lg:px-32 p-3 ">
+      <div className="flex flex-col  gap-3 lg:px-32 p-3 ">
         <Heading />
+        <Disclaimer />
       </div>
     </main>
   );
