@@ -41,3 +41,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+/components/Holdings.tsx
+/components/Card.tsx
+/types
+/libs

@@ -13,7 +13,7 @@ type Props = {
 const Harvesting = ({ type, className, data }: Props) => {
   return (
     <div
-      className={`w-full border border-pink-400  rounded-md p-4 ${className}`}
+      className={`w-full border border-border shadow rounded-md p-4 ${className}`}
     >
       <h1 className=" font-semibold text-md mb-3">
         {type === "pre" ? "Pre Harvesting" : "After Harvesting"}
