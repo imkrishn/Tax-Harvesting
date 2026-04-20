@@ -12,15 +12,15 @@ export function calculateAfterHarvest(
     const ltGain = asset.ltcg.gain;
 
     if (stGain > 0) {
-      updated.stcg.profits += stGain;
+      updated.capitalGains.stcg.profits += stGain;
     } else {
-      updated.stcg.losses += Math.abs(stGain);
+      updated.capitalGains.stcg.losses += Math.abs(stGain);
     }
 
     if (ltGain > 0) {
-      updated.ltcg.profits += ltGain;
+      updated.capitalGains.ltcg.profits += ltGain;
     } else {
-      updated.ltcg.losses += Math.abs(ltGain);
+      updated.capitalGains.ltcg.losses += Math.abs(ltGain);
     }
   });
 

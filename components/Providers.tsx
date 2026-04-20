@@ -3,6 +3,7 @@
 import { ThemeProvider } from "next-themes";
 import { ReactNode, useEffect, useState } from "react";
 import { TooltipProvider } from "./ui/tooltip";
+import { Toaster } from "sonner";
 
 export function Providers({ children }: { children: ReactNode }) {
   const [mounted, setMounted] = useState(false);
@@ -21,6 +22,7 @@ export function Providers({ children }: { children: ReactNode }) {
 
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+      <Toaster position="top-center" richColors />
       <TooltipProvider>{children}</TooltipProvider>
     </ThemeProvider>
   );

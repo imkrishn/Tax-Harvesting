@@ -1,16 +1,56 @@
-import React from "react";
+"use client";
+
+import { CapitalGains, Data } from "@/types/capitalgains.types";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 type Props = {
   type: "pre" | "after";
   className?: string;
-  data?: {
-    profits: { short: number; long: number };
-    losses: { short: number; long: number };
-    gains: { short: number; long: number };
-  };
 };
 
-const Harvesting = ({ type, className, data }: Props) => {
+const Harvesting = ({ type, className }: Props) => {
+  const [capital, setCapital] = useState<CapitalGains | null>(null);
+  const [data, setData] = useState<Data>(null);
+  const afterHarvested: Data = null;
+
+  useEffect(() => {
+    try {
+      fetch("/api/capital-gains")
+        .then((res) => res.json())
+        .then(setCapital);
+    } catch (Err) {
+      toast.error("Failed to fetch capital data");
+      console.log("Failed to fetch capital data");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (type === "after" && afterHarvested) {
+      setData(afterHarvested);
+    } else {
+      const ltcg = capital?.capitalGains.ltcg;
+      const stcg = capital?.capitalGains.stcg;
+      const stcgGain = (stcg?.profits ?? 0) - (stcg?.losses ?? 0);
+      const ltcgGain = (ltcg?.profits ?? 0) - (ltcg?.losses ?? 0);
+      const gain = stcgGain + ltcgGain;
+      const capitalData = {
+        stcg: {
+          profits: stcg?.profits ?? 0,
+          losses: stcg?.losses ?? 0,
+        },
+        ltcg: {
+          profits: ltcg?.profits ?? 0,
+          losses: ltcg?.losses ?? 0,
+        },
+        stcgGain,
+        ltcgGain,
+        gain,
+      };
+      setData(capitalData);
+    }
+  }, [afterHarvested, type, capital]);
+
   return (
     <div
       className={`w-full border border-border shadow rounded-md p-4 ${className}`}
@@ -25,19 +65,20 @@ const Harvesting = ({ type, className, data }: Props) => {
         <h5>Long-term</h5>
 
         <h5>Profits</h5>
-        <p>$ {data?.profits.short ?? 0}</p>
-        <p>$ {data?.profits.long ?? 0}</p>
+        <p>$ {data?.stcg.profits}</p>
+        <p>$ {data?.ltcg.profits}</p>
 
         <h5>Losses</h5>
-        <p>$ {data?.losses.short ?? 0}</p>
-        <p>$ {data?.losses.long ?? 0}</p>
+        <p>$ {data?.stcg.losses}</p>
+        <p>$ {data?.ltcg.losses}</p>
 
         <h5 className="font-medium">Net Capital Gains</h5>
-        <p>$ {data?.gains.short ?? 0}</p>
-        <p>$ {data?.gains.long ?? 0}</p>
+        <p>$ {data?.stcgGain}</p>
+        <p>$ {data?.ltcgGain}</p>
       </div>
       <h1 className="my-3 font-bold text-md">
-        {type === "pre" ? "Realised" : "Effective"} Capital Gains : {"$834758"}
+        {type === "pre" ? "Realised" : "Effective"} Capital Gains :{" "}
+        {capital && <span>$ {data?.gain}</span>}
       </h1>
     </div>
   );

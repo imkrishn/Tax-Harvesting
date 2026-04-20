@@ -17,7 +17,7 @@ export const holdings = [
   },
   {
     coin: "WETH",
-    coinName: "Polygon PoS Bridged WETH (Polygon POS)",
+    coinName: "Polygon PoS ",
     logo: "https://coin-images.coingecko.com/coins/images/2518/large/weth.png?1696503332",
     currentPrice: 211756,
     totalHolding: 0.00023999998390319965,
@@ -97,7 +97,7 @@ export const holdings = [
   },
   {
     coin: "USDT",
-    coinName: "Arbitrum Bridged USDT (Arbitrum)",
+    coinName: "Arbitrum ",
     logo: "https://coin-images.coingecko.com/coins/images/325/large/Tether.png?1696501661",
     currentPrice: 85.42,
     totalHolding: 0.0001580000000558357,
@@ -113,7 +113,7 @@ export const holdings = [
   },
   {
     coin: "USDC",
-    coinName: "Bridged USDC (Polygon PoS Bridge)",
+    coinName: "Bridged USDC ",
     logo: "https://coin-images.coingecko.com/coins/images/33000/large/usdc.png?1700119918",
     currentPrice: 85.41,
     totalHolding: 0.005806999999992795,
