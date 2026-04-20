@@ -6,7 +6,7 @@ import React, { useState } from "react";
 const Disclaimer = () => {
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   return (
-    <div className="w-full border lg:text-sm text-xs mt-3  border-pink-500 bg-disclaimer-background p-3 rounded-md">
+    <div className="w-full border lg:text-sm text-xs mt-3  border-pink-400 bg-disclaimer-background p-3 rounded-md">
       <div className="flex gap-2 items-center">
         <Info stroke="#e4b005" size={18} />
         <p className="w-full font-medium">Strict Notes & Disclaimer</p>
