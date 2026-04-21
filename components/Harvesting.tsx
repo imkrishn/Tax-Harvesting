@@ -1,7 +1,9 @@
 "use client";
 
+import { RootState } from "@/redux/store";
 import { CapitalGains, Data } from "@/types/capitalgains.types";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { toast } from "sonner";
 
 type Props = {
@@ -12,7 +14,9 @@ type Props = {
 const Harvesting = ({ type, className }: Props) => {
   const [capital, setCapital] = useState<CapitalGains | null>(null);
   const [data, setData] = useState<Data>(null);
-  const afterHarvested: Data = null;
+  const afterHarvested: Data = useSelector(
+    (state: RootState) => state.afterHarvestingData,
+  );
 
   useEffect(() => {
     try {

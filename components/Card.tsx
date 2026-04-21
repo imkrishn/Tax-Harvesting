@@ -4,8 +4,17 @@ import { formatCrypto, formatUSD } from "@/lib/format";
 import { Holding } from "@/types/holding.types";
 import Image from "next/image";
 import Tooltip from "./Tooltip";
+import { useState } from "react";
 
-export default function Card({ data }: { data: Holding }) {
+export default function Card({
+  data,
+  setSelected,
+  checkAll = false,
+}: {
+  data: Holding;
+  setSelected: React.Dispatch<React.SetStateAction<any[]>>;
+  checkAll?: boolean;
+}) {
   const {
     coin,
     coinName,
@@ -17,13 +26,29 @@ export default function Card({ data }: { data: Holding }) {
     ltcg,
   } = data;
 
-  const totalValue = totalHolding * currentPrice;
+  const [isChecked, setIsChecked] = useState<boolean>(false);
+
+  function onSelect() {
+    setSelected((prev) => {
+      if (isChecked) {
+        setIsChecked(false);
+        return prev.filter((item) => item !== data);
+      }
+      setIsChecked(true);
+      return [...prev, data];
+    });
+  }
 
   return (
     <div className="grid lg:grid-cols-8 grid-cols-2 gap-3 px-4 py-3  text-sm">
       {/* assest column */}
       <div className="lg:col-span-2 col-span-1 flex items-center pl-1 gap-3">
-        <input type="checkbox" className="accent-blue-600" />
+        <input
+          onChange={onSelect}
+          type="checkbox"
+          className="accent-blue-600"
+          checked={isChecked || checkAll}
+        />
         <Image
           alt="coinlogo"
           height={50}
@@ -85,7 +110,7 @@ export default function Card({ data }: { data: Holding }) {
       {/* amount to sell column */}
       <div className="col-span-1 text-center hidden lg:block">
         <p className="font-medium">
-          {formatUSD(totalValue) === "$0.00" ? "-" : formatUSD(totalValue)}
+          {formatUSD(totalHolding) === "$0.00" ? "-" : formatUSD(totalHolding)}
         </p>
       </div>
     </div>

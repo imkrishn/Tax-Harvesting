@@ -5,12 +5,13 @@ import { Holding } from "@/types/holding.types";
 import React, { useEffect, useState } from "react";
 import Card from "./Card";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { calculateAfterHarvest } from "@/lib/calcHarvest";
 
 const Holdings = () => {
   const [capital, setCapital] = useState<CapitalGains | null>(null);
   const [holdings, setHoldings] = useState<Holding[]>([]);
   const [viewAll, setViewAll] = useState(false);
-  const [selected, setSelected] = useState<any[]>([]);
+  const [selected, setSelected] = useState<Holding[]>([]);
   const [ascOrder, setAscOrder] = useState(true);
 
   useEffect(() => {
@@ -39,13 +40,36 @@ const Holdings = () => {
     setAscOrder((prev) => !prev);
   }
 
+  //caluate harvest function
+
+  useEffect(() => {
+    if (capital) {
+      const harvestedData = calculateAfterHarvest(capital, selected);
+      console.log("harvestedData", harvestedData);
+    }
+  }, [selected]);
+
+  // all select and deselect function
+  function onSelectDeselectedAll() {
+    selected.length === holdings.length
+      ? setSelected([])
+      : setSelected(holdings);
+  }
+
+  const checkAll = selected.length === holdings.length;
+
   return (
     <div className="border border-border shadow rounded-md p-4 w-full h-full overflow-auto  text-muted-foreground">
       <h1 className="font-semibold text-md mb-3">Holdings</h1>
       <div className="grid lg:grid-cols-8 grid-cols-2 gap-3 text-sm bg-secondary-background p-2 rounded-md">
         <div className="lg:col-span-2 col-span-1 inline">
           {" "}
-          <input type="checkbox" className="mx-3" />
+          <input
+            type="checkbox"
+            checked={checkAll}
+            className="mx-3 text-orange-500"
+            onChange={onSelectDeselectedAll}
+          />
           Asset
         </div>
         <div className="col-span-1 ">Holdings</div>
@@ -70,7 +94,12 @@ const Holdings = () => {
         {holdings
           .slice(0, viewAll ? holdings.length : 5)
           .map((holding, index) => (
-            <Card key={index} data={holding} />
+            <Card
+              key={index}
+              data={holding}
+              setSelected={setSelected}
+              checkAll={checkAll}
+            />
           ))}
       </div>
       {!viewAll && (
