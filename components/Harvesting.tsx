@@ -59,7 +59,7 @@ const Harvesting = ({ type, className }: Props) => {
         {type === "pre" ? "Pre Harvesting" : "After Harvesting"}
       </h1>
 
-      <div className="grid grid-cols-[50%_25%_25%] gap-y-3 text-sm">
+      <div className="grid grid-cols-[50%_25%_25%] gap-y-3 text-xs">
         <div></div>
         <h5>Short-term</h5>
         <h5>Long-term</h5>

@@ -15,8 +15,8 @@ export default function Home() {
       <div className="flex flex-col  gap-3 lg:px-10 p-3 ">
         <Heading />
         <Disclaimer />
-        <div className="flex flex-col lg:flex-row gap-3">
-          <div className="lg:min-w-sm flex flex-col  gap-3">
+        <div className="flex flex-col lg:flex-row gap-3 lg:h-[78vh]">
+          <div className="lg:min-w-88 flex flex-col justify-between gap-3">
             <Harvesting
               type="after"
               className="bg-linear-to-br from-[#fc2482e7] to-[#8b7cf6] text-white"
