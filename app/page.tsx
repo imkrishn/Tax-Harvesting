@@ -22,7 +22,7 @@ export default function Home() {
               className="bg-linear-to-br from-[#fc2482e7] to-[#8b7cf6] text-white"
             />
             <Harvesting
-              type="pre"
+              type="before"
               className="bg-secondary-background/50 text-muted-foreground"
             />
           </div>

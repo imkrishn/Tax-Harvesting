@@ -4,7 +4,7 @@ import { formatCrypto, formatUSD } from "@/lib/format";
 import { Holding } from "@/types/holding.types";
 import Image from "next/image";
 import Tooltip from "./Tooltip";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Card({
   data,
@@ -12,7 +12,7 @@ export default function Card({
   checkAll = false,
 }: {
   data: Holding;
-  setSelected: React.Dispatch<React.SetStateAction<any[]>>;
+  setSelected: React.Dispatch<React.SetStateAction<Holding[]>>;
   checkAll?: boolean;
 }) {
   const {
@@ -29,15 +29,25 @@ export default function Card({
   const [isChecked, setIsChecked] = useState<boolean>(false);
 
   function onSelect() {
-    setSelected((prev) => {
+    {
       if (isChecked) {
         setIsChecked(false);
-        return prev.filter((item) => item !== data);
+        setSelected((prev) => prev.filter((item) => item !== data));
+        return;
       }
       setIsChecked(true);
-      return [...prev, data];
-    });
+      setSelected((prev) => [...prev, data]);
+    }
   }
+
+  useEffect(() => {
+    function toggleCheckAll() {
+      if (checkAll) {
+        setIsChecked(false);
+      }
+    }
+    toggleCheckAll();
+  }, [checkAll]);
 
   return (
     <div className="grid lg:grid-cols-8 grid-cols-2 gap-3 px-4 py-3  text-sm">
@@ -47,7 +57,7 @@ export default function Card({
           onChange={onSelect}
           type="checkbox"
           className="accent-blue-600"
-          checked={isChecked || checkAll}
+          checked={checkAll || isChecked}
         />
         <Image
           alt="coinlogo"
@@ -74,14 +84,14 @@ export default function Card({
 
       {/* total current value column */}
       <div className="col-span-1  text-center hidden lg:block">
-        <Tooltip text={formatUSD(currentPrice)} position="top">
+        <Tooltip text={currentPrice.toFixed(3)} position="top">
           <p className="font-medium">{formatUSD(currentPrice)}</p>
         </Tooltip>
       </div>
 
       {/* short term column */}
       <div className="col-span-2 pl-2 hidden lg:block">
-        <Tooltip text={formatCrypto(stcg.gain)} position="top">
+        <Tooltip text={stcg.gain.toFixed(3)} position="top">
           <p
             className={`font-medium ${
               stcg.gain >= 0 ? "text-green-600" : "text-red-500"
@@ -97,7 +107,7 @@ export default function Card({
 
       {/* long term column */}
       <div className="col-span-1 pl-2 hidden lg:block">
-        <Tooltip text={formatCrypto(ltcg.gain)} position="top">
+        <Tooltip text={ltcg.gain.toFixed(3)} position="top">
           <p className="text-green-600 font-medium">
             +${formatCrypto(ltcg?.gain || 0)}
           </p>

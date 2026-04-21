@@ -1,28 +1,46 @@
-import { Holding } from "@/types/holding.types";
 import { CapitalGains } from "@/types/capitalgains.types";
+import { Holding } from "@/types/holding.types";
 
-export function calculateAfterHarvest(
-  base: CapitalGains,
-  selected: Holding[],
-): CapitalGains {
-  const updated: CapitalGains = structuredClone(base);
+const round = (n: number, d = 4) => Math.round(n * 10 ** d) / 10 ** d;
+
+export function calculateAfterHarvest(base: CapitalGains, selected: Holding[]) {
+  const updated = structuredClone(base.capitalGains);
 
   selected.forEach((asset) => {
     const stGain = asset.stcg.gain;
     const ltGain = asset.ltcg.gain;
 
     if (stGain > 0) {
-      updated.capitalGains.stcg.profits += stGain;
+      updated.stcg.profits += round(stGain);
     } else {
-      updated.capitalGains.stcg.losses += Math.abs(stGain);
+      updated.stcg.losses += Math.abs(stGain);
     }
 
     if (ltGain > 0) {
-      updated.capitalGains.ltcg.profits += ltGain;
+      updated.ltcg.profits += round(ltGain);
     } else {
-      updated.capitalGains.ltcg.losses += Math.abs(ltGain);
+      updated.ltcg.losses += Math.abs(ltGain);
     }
   });
 
-  return updated;
+  const finalData = {
+    stcg: {
+      profits: updated.stcg.profits,
+      losses: updated.stcg.losses,
+    },
+    ltcg: {
+      profits: updated.ltcg.profits,
+      losses: updated.ltcg.losses,
+    },
+    stcgGain: round(updated.stcg.profits - updated.stcg.losses),
+    ltcgGain: round(updated.ltcg.profits - updated.ltcg.losses),
+    gain: round(
+      updated.stcg.profits -
+        updated.stcg.losses +
+        updated.ltcg.profits -
+        updated.ltcg.losses,
+    ),
+  };
+
+  return finalData;
 }

@@ -6,6 +6,10 @@ import React, { useEffect, useState } from "react";
 import Card from "./Card";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { calculateAfterHarvest } from "@/lib/calcHarvest";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { setAfterHarvestingData } from "@/redux/slices/afterHarvestingData";
+import { toast } from "sonner";
 
 const Holdings = () => {
   const [capital, setCapital] = useState<CapitalGains | null>(null);
@@ -13,6 +17,11 @@ const Holdings = () => {
   const [viewAll, setViewAll] = useState(false);
   const [selected, setSelected] = useState<Holding[]>([]);
   const [ascOrder, setAscOrder] = useState(true);
+  const [checkAll, setCheckAll] = useState(false);
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  //intial holdings and capital data fetch
 
   useEffect(() => {
     try {
@@ -24,6 +33,7 @@ const Holdings = () => {
         .then((res) => res.json())
         .then(setHoldings);
     } catch (Err) {
+      toast.error("Failed to fetch holdings data");
       console.log("Failed to fetch data");
     }
   }, []);
@@ -43,10 +53,18 @@ const Holdings = () => {
   //caluate harvest function
 
   useEffect(() => {
-    if (capital) {
-      const harvestedData = calculateAfterHarvest(capital, selected);
-      console.log("harvestedData", harvestedData);
+    function calculate() {
+      if (capital) {
+        const harvestedData = calculateAfterHarvest(capital, selected);
+
+        dispatch(setAfterHarvestingData(harvestedData));
+      }
+      const check =
+        selected.length === holdings.length && holdings.length !== 0;
+      setCheckAll(check);
     }
+
+    calculate();
   }, [selected]);
 
   // all select and deselect function
@@ -55,8 +73,6 @@ const Holdings = () => {
       ? setSelected([])
       : setSelected(holdings);
   }
-
-  const checkAll = selected.length === holdings.length;
 
   return (
     <div className="border border-border shadow rounded-md p-4 w-full h-full overflow-auto  text-muted-foreground">
@@ -81,9 +97,9 @@ const Holdings = () => {
           className="col-span-2 lg:flex hidden items-center gap-2 cursor-pointer"
         >
           {ascOrder ? (
-            <ChevronUp strokeWidth={2} size={14} />
-          ) : (
             <ChevronDown strokeWidth={2} size={14} />
+          ) : (
+            <ChevronUp strokeWidth={2} size={14} />
           )}
           <p>Short term</p>
         </div>

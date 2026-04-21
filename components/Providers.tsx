@@ -11,23 +11,21 @@ export function Providers({ children }: { children: ReactNode }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    function setUp() {
+      setMounted(true);
+    }
+
+    setUp();
   }, []);
 
-  if (!mounted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        Loading...
-      </div>
-    );
-  }
+  if (!mounted) return null;
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-      <Provider store={store}>
+    <Provider store={store}>
+      <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
         <Toaster position="top-center" richColors />
         {children}
-      </Provider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </Provider>
   );
 }
